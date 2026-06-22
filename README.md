@@ -40,6 +40,27 @@ python main.py --folder "Inbox" --output-dir "email_bodies"
 本仓库还包含 agent skill 配置：
 
 - `.agents/skills/`：已安装的 Matt Pocock 中文 skill
+- `skills-lock.json`：skill 版本锁定文件
 - `docs/agents/`：agent 文档说明
 - `CONTEXT.md`：项目上下文说明
 - `docs/adr/`：架构决策记录目录
+
+## 跨设备同步
+
+该项目已将 `.agents/skills` 和 `skills-lock.json` 一并提交到仓库，因此在另一台设备上克隆后，支持 skill 的 agent 环境可以直接使用这些 skill 定义。
+
+推荐流程：
+
+```powershell
+git clone https://github.com/leonardowang115/deepseek.git
+cd deepseek
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
+
+如果你的 agent 环境没有自动加载 `.agents`，请检查你的 Copilot/agent 工具是否将仓库根目录作为 skill 根目录。
+
+## 生成目录
+
+`email_bodies/` 为脚本运行时生成的目录，已添加到 `.gitignore`，不会被同步到 GitHub。
