@@ -1,3 +1,4 @@
+import argparse
 import datetime
 import os
 import re
@@ -93,10 +94,34 @@ def save_email_bodies(emails, dest_folder="email_bodies"):
     return dest_folder
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="从本地 Outlook 读取最近邮件并保存正文。"
+    )
+    parser.add_argument(
+        "--folder",
+        default="Inbox",
+        help="Outlook 文件夹名称，默认 Inbox",
+    )
+    parser.add_argument(
+        "--output-dir",
+        default="email_bodies",
+        help="保存邮件正文的目录，默认 email_bodies",
+    )
+    parser.add_argument(
+        "--hours",
+        type=int,
+        default=24,
+        help="检索过去的小时范围，默认 24",
+    )
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
-    emails = get_outlook_emails_last_24h()
-    print(f"最近 24 小时邮件数量: {len(emails)}")
-    saved_folder = save_email_bodies(emails)
+    args = parse_args()
+    emails = get_outlook_emails_last_24h(folder_name=args.folder, hours=args.hours)
+    print(f"最近 {args.hours} 小时邮件数量: {len(emails)}")
+    saved_folder = save_email_bodies(emails, dest_folder=args.output_dir)
     print(f"已保存邮件正文到目录: {os.path.abspath(saved_folder)}")
     for mail in emails:
         print("---")
