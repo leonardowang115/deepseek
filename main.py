@@ -15,8 +15,8 @@ except ImportError:
     win32com = None
 
 
-def get_outlook_emails_last_24h(folder_name="Inbox"):
-    """获取本地 Outlook 中指定文件夹最近 24 小时的邮件。"""
+def get_outlook_emails_last_24h(folder_name="Inbox", hours=24):
+    """获取本地 Outlook 中指定文件夹过去 `hours` 小时的邮件。"""
     if win32com is None:
         raise ImportError(
             "需要安装 pywin32: pip install pywin32"
@@ -38,7 +38,7 @@ def get_outlook_emails_last_24h(folder_name="Inbox"):
         folder = inbox
 
     now = datetime.datetime.now()
-    since = now - datetime.timedelta(hours=24)
+    since = now - datetime.timedelta(hours=hours)
     restriction = "[ReceivedTime] >= '{0}'".format(
         since.strftime("%m/%d/%Y %H:%M")
     )
