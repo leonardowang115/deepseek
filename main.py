@@ -1,5 +1,6 @@
 import argparse
 import datetime
+import json
 import os
 import re
 import sys
@@ -71,27 +72,46 @@ def safe_filename(text):
     return text[:120] or "email"
 
 
-def save_email_bodies(emails, dest_folder="email_bodies"):
-    os.makedirs(dest_folder, exist_ok=True)
+def save_email_bodies(emails, dest_folder="email_bodies", folder_name="Inbox"):
+    root_folder = os.path.join(dest_folder, safe_filename(folder_name))
+    os.makedirs(root_folder, exist_ok=True)
+    saved_folders = []
+
     for idx, mail in enumerate(emails, start=1):
         subject = safe_filename(mail.get("subject"))
+        sender = safe_filename(mail.get("sender"))
         received_time = mail.get("received_time")
-        timestamp = received_time.strftime("%Y%m%d_%H%M%S") if received_time else f"{idx:04d}"
-        filename = f"{timestamp}_{subject}.txt"
-        filepath = os.path.join(dest_folder, filename)
-        counter = 1
-        while os.path.exists(filepath):
-            filepath = os.path.join(dest_folder, f"{timestamp}_{subject}_{counter}.txt")
-            counter += 1
+        date_folder = (
+            received_time.strftime("%Y-%m-%d") if received_time else "unknown_date"
+        )
+        timestamp = (
+            received_time.strftime("%Y%m%d_%H%M%S") if received_time else f"{idx:04d}"
+        )
 
-        with open(filepath, "w", encoding="utf-8") as f:
-            f.write(f"Subject: {mail.get('subject', '')}\n")
-            f.write(f"Sender: {mail.get('sender', '')}\n")
-            f.write(f"ReceivedTime: {mail.get('received_time', '')}\n")
-            f.write("\n")
+        email_folder_name = f"{timestamp}_{sender}_{subject}"
+        email_folder_name = email_folder_name[:120] or f"email_{idx:04d}"
+        email_folder = os.path.join(root_folder, date_folder, email_folder_name)
+        os.makedirs(email_folder, exist_ok=True)
+
+        body_path = os.path.join(email_folder, "body.txt")
+        metadata_path = os.path.join(email_folder, "metadata.json")
+
+        with open(body_path, "w", encoding="utf-8") as f:
             f.write(mail.get("body", ""))
 
-    return dest_folder
+        metadata = {
+            "subject": mail.get("subject", ""),
+            "sender": mail.get("sender", ""),
+            "received_time": str(mail.get("received_time", "")),
+            "entry_id": mail.get("entry_id", ""),
+            "folder": folder_name,
+        }
+        with open(metadata_path, "w", encoding="utf-8") as f:
+            json.dump(metadata, f, ensure_ascii=False, indent=2)
+
+        saved_folders.append(email_folder)
+
+    return root_folder, saved_folders
 
 
 def parse_args():
@@ -121,11 +141,11 @@ if __name__ == "__main__":
     args = parse_args()
     emails = get_outlook_emails_last_24h(folder_name=args.folder, hours=args.hours)
     print(f"最近 {args.hours} 小时邮件数量: {len(emails)}")
-    saved_folder = save_email_bodies(emails, dest_folder=args.output_dir)
+    saved_folder, saved_folders = save_email_bodies(
+        emails, dest_folder=args.output_dir, folder_name=args.folder
+    )
     print(f"已保存邮件正文到目录: {os.path.abspath(saved_folder)}")
-    for mail in emails:
-        print("---")
-        print(f"主题: {mail['subject']}")
-        print(f"发件人: {mail['sender']}")
-        print(f"接收时间: {mail['received_time']}")
-        print(f"正文预览: {mail['body'][:200]}")
+    print(f"邮件总数: {len(saved_folders)}，按日期和邮件文件夹组织")
+    print("前 5 个邮件目录：")
+    for folder in saved_folders[:5]:
+        print(f"- {folder}")

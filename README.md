@@ -24,16 +24,32 @@ python main.py
 ### 可选参数
 
 ```powershell
-python main.py --folder "Inbox" --output-dir "email_bodies"
+python main.py --folder "Inbox" --output-dir "email_bodies" --hours 24
 ```
 
 - `--folder`：指定 Outlook 文件夹名称，默认 `Inbox`。
 - `--output-dir`：指定邮件正文保存目录，默认 `email_bodies`。
 - `--hours`：指定检索时间范围（小时），默认 `24`。
 
-## 输出
+## 输出结构
 
-脚本会打印邮件数量、目录路径和每封邮件的主题、发件人、接收时间以及正文预览。
+程序会将每封邮件保存到如下结构：
+
+```
+email_bodies/
+  Inbox/
+    2026-06-22/
+      20260622_091234_sender_subject/
+        body.txt
+        metadata.json
+```
+
+每封邮件目录包含：
+
+- `body.txt`：邮件正文
+- `metadata.json`：邮件主题、发件人、接收时间、EntryID、来源文件夹等元数据
+
+脚本执行完后会打印保存目录、邮件总数，以及前 5 个保存的邮件目录，方便快速检查。 
 
 ## 仓库说明
 
