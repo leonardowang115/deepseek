@@ -1,0 +1,10 @@
+.venv/
+email_bodies/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+.DS_Store
+.idea/
+.vscode/
