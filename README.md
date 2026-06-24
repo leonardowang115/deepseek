@@ -77,6 +77,17 @@ pip install -r requirements.txt
 
 如果你的 agent 环境没有自动加载 `.agents`，请检查你的 Copilot/agent 工具是否将仓库根目录作为 skill 根目录。
 
-## 生成目录
+## 未来设计
 
-`email_bodies/` 为脚本运行时生成的目录，已添加到 `.gitignore`，不会被同步到 GitHub。
+本项目的下一阶段架构目标是构建一个 Outlook 邮件采集 + 大模型分析 + 优先级评估的 agent pipeline。设计思路包括：
+
+- 输入：按时间范围（例如最近 24 小时）从 Outlook 读取邮件
+- 存储：将邮件正文与元数据保存为结构化本地目录
+- 分析：让大模型对邮件内容进行摘要、分类、优先级判定
+- 输出：生成按优先级排序的邮件列表、行动建议或代理指令
+
+这将把 `main.py` 从简单导出工具演进为 agent 数据采集层，后续可扩展为独立模块：`fetcher`、`storage`、`analyzer`、`prioritizer`。
+
+## 仓库说明
+
+本仓库还包含 agent skill 配置：

@@ -1,1 +1,3 @@
+openai>=2.0.0
 pywin32>=304
+pytest>=8.0
