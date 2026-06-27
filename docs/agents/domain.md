@@ -1,19 +1,33 @@
-# 域文档（Domain Docs）
+# Domain Docs
 
-工程类技能在探索代码库时，需如何使用本仓库的域文档：
+Engineering skills should use this repo's domain documentation before and during code exploration.
 
-必读（优先顺序）：
-- 根目录的 `CONTEXT.md`：项目概述与关键术语
-- `docs/adr/`：架构决策记录（ADRs），说明重大设计/决策历史
+## Before Exploring, Read These
 
-仓库布局（单上下文示例）：
+- Root `CONTEXT.md`: project context, vocabulary, and important conventions.
+- `docs/adr/`: architecture decision records. Read ADRs relevant to the area being changed.
+
+If either location is absent, continue quietly. Do not create missing docs unless the current task actually resolves terms or decisions that should be recorded.
+
+## Layout
+
+This repository is single-context:
+
+```text
 /
-├── CONTEXT.md
-├── docs/adr/
-│   ├── 0001-example.md
-	└── 0002-another-decision.md
-└── src/
+|-- CONTEXT.md
+|-- docs/adr/
+|   `-- 0001-placeholder.md
+|-- main.py
+`-- README.md
+```
 
-说明：
-- 本仓库采用 single-context 布局（即只有一个 `CONTEXT.md`）。
-- 若未来改为多上下文（例如 monorepo），请改为使用 `CONTEXT-MAP.md` 指向各子上下文。
+If this repo later becomes multi-context, add a root `CONTEXT-MAP.md` that points to each context-specific `CONTEXT.md`, and update this file.
+
+## Vocabulary
+
+Use terms from `CONTEXT.md` when naming issues, tests, hypotheses, refactor plans, and implementation concepts.
+
+## ADR Conflicts
+
+If a proposed change contradicts an existing ADR, call that out explicitly instead of silently overriding the decision.

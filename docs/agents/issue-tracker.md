@@ -1,22 +1,22 @@
-# Issue tracker: GitHub
+# Issue Tracker: GitHub
 
-这个 repo 的 issues 和 PRDs 存放在 GitHub issues 中。所有操作都使用 `gh` CLI。
+This repo tracks issues and PRDs in GitHub Issues. Use the `gh` CLI for issue operations.
 
 ## Conventions
 
-- **Create an issue**: `gh issue create --title "..." --body "..."`。多行 body 使用 heredoc。
-- **Read an issue**: `gh issue view <number> --comments`，用 `jq` 过滤 comments，并同时获取 labels。
-- **List issues**: `gh issue list --state open --json number,title,body,labels,comments --jq '[.[] | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]'`，按需加上 `--label` 和 `--state` filters。
+- **Create an issue**: `gh issue create --title "..." --body "..."`. Use heredoc-style input for multiline bodies.
+- **Read an issue**: `gh issue view <number> --comments`. Use `jq` when filtering comments and labels.
+- **List issues**: `gh issue list --state open --json number,title,body,labels,comments --jq '[.[] | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]'`. Add `--label` and `--state` filters as needed.
 - **Comment on an issue**: `gh issue comment <number> --body "..."`
 - **Apply / remove labels**: `gh issue edit <number> --add-label "..." --remove-label "..."`
 - **Close**: `gh issue close <number> --comment "..."`
 
-从 `git remote -v` 推断 repo；在 clone 内运行时，`gh` 会自动处理。
+Infer the repository from `git remote -v`; inside a clone, `gh` should resolve it automatically.
 
 ## When a skill says "publish to the issue tracker"
 
-创建一个 GitHub issue。
+Create a GitHub issue.
 
 ## When a skill says "fetch the relevant ticket"
 
-运行 `gh issue view <number> --comments`。
+Run `gh issue view <number> --comments`.

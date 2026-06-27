@@ -1,13 +1,15 @@
-# Triage labels
+# Triage Labels
 
-这个 repo 使用以下 canonical triage label 词汇：
+This repo uses the standard canonical triage label vocabulary:
 
-- `needs-triage` — maintainer needs to evaluate
-- `needs-info` — waiting on reporter
-- `ready-for-agent` — fully specified, AFK-ready
-- `ready-for-human` — needs human implementation
-- `wontfix` — will not be actioned
+| Label in skills | Label in this tracker | Meaning |
+| --- | --- | --- |
+| `needs-triage` | `needs-triage` | Maintainer needs to evaluate this issue |
+| `needs-info` | `needs-info` | Waiting on reporter for more information |
+| `ready-for-agent` | `ready-for-agent` | Fully specified, ready for an AFK agent |
+| `ready-for-human` | `ready-for-human` | Requires human implementation |
+| `wontfix` | `wontfix` | Will not be actioned |
 
-如果 issue tracker 中尚未创建这些 labels，建议直接使用这些名称。
+When a skill refers to a triage role, apply the corresponding label from this table.
 
-如果你需要用不同的 label 名称，请在此文件中替换对应关系。
+If GitHub does not have these labels yet, create them with these exact names.
